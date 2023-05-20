@@ -33,3 +33,24 @@ const book = await prisma.book.create({
   },
 });
 console.log(`Created book ${book.title} (${book.id})`);
+
+await prisma.book.createMany({
+  data: [
+    {
+      title: "Crazy programming book",
+      isbn: "123-456789-1",
+      publishedAt: new Date(),
+      authorId: author.id,
+      categoryId: category.id,
+      publisherId: publisher.id,
+    },
+    {
+      title: "How to create an API from scratch",
+      isbn: "123-456789-2",
+      publishedAt: new Date(),
+      authorId: author.id,
+      categoryId: category.id,
+      publisherId: publisher.id,
+    },
+  ],
+});
