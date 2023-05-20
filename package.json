@@ -2,7 +2,8 @@
   "name": "p3-backend-2023",
   "version": "1.0.0",
   "description": "Se trata de hacer un _backend_ usando Typescript, Express y Prisma. El _backend_ implementado en clase es el modelo a seguir. Para alumnos que lo hacen por primera vez y sienten algo de incomodidad, lo ideal es usar el modelo de guía y hacer un _backend_ cercano al original de tal manera que la práctica sea un repaso a fondo. Para los que estén más cómodos, lo ideal es innovar en algun aspecto y salirse parcialmente del modelo en ciertos momentos o explorar algún interés personal.",
-  "main": "index.js",
+  "main": "src/server.ts",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^4.14.1",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "morgan": "^1.10.0"
@@ -22,5 +24,8 @@
     "ts-node": "^10.9.1",
     "ty": "^0.0.1",
     "typescipt": "^1.0.0"
+  },
+  "prisma": {
+    "seed": "ts-node-esm src/seed.ts"
   }
 }
