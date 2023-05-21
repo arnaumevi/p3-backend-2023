@@ -1,36 +1,63 @@
-import { Router } from "express";
+import { Request, Router } from "express";
 import prisma from "./prisma-client.js";
+import { errorChecked } from "./utils.js";
 
 const router = Router();
 
-router.get("/", async (req, res) => {
-  try {
+router.get(
+  "/",
+  errorChecked(async (req, res) => {
     const result = await prisma.book.findMany({});
     res.status(200).json({ books: result, ok: true });
-  } catch (e) {
-    res.status(500).send({
-      type: e.constructor.name,
-      message: e.toString(),
-    });
-  }
+  })
+);
+
+router.post(
+  "/",
+  errorChecked(async (req, res) => {
+    const newBook = await prisma.book.create({ data: req.body });
+    res.status(200).json({ newBook, ok: true });
+  })
+);
+
+export interface RequestWithBookId extends Request {
+  bookId: number;
+}
+router.use("/:id", async (req: RequestWithBookId, res, next) => {
+  const { id } = req.params;
+  req.bookId = Number(id);
+  next();
 });
 
-router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    const book = await prisma.book.findUnique({
-      where: { id: Number(id) },
+router.get(
+  "/:id",
+  errorChecked(async (req: RequestWithBookId, res) => {
+    const book = await prisma.book.findUniqueOrThrow({
+      where: { id: req.bookId },
     });
-    if (book === null) {
-      return res.status(404).json({ error: `Book with ${id} not found` });
-    }
     res.status(200).json(book);
-  } catch (e) {
-    res.status(500).send({
-      type: e.constructor.name,
-      message: e.toString(),
+  })
+);
+
+router.put(
+  "/:id",
+  errorChecked(async (req: RequestWithBookId, res) => {
+    const updatedBook = await prisma.book.update({
+      where: { id: req.bookId },
+      data: req.body,
     });
-  }
-});
+    res.status(200).json(updatedBook);
+  })
+);
+
+router.delete(
+  "/:id",
+  errorChecked(async (req: RequestWithBookId, res) => {
+    const deletedBook = await prisma.book.delete({
+      where: { id: req.bookId },
+    });
+    res.status(200).json(deletedBook);
+  })
+);
 
 export default router;

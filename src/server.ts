@@ -1,8 +1,10 @@
 import express from "express";
+import { ErrorRequestHandler } from "express";
 import cors from "cors";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import booksRouter from "./books.js";
+import { defaultErrorHandler } from "./utils.js";
 
 dotenv.config();
 
