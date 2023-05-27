@@ -1,15 +1,30 @@
 import { Request, Router } from "express";
 import prisma from "./prisma-client.js";
 import { errorChecked } from "./utils.js";
+import { RequestWithAuthorId } from "./authors.js";
+import { RequestWithPublisherId } from "./publishers.js";
 
 const router = Router();
 
 router.get(
   "/",
-  errorChecked(async (req, res) => {
-    const result = await prisma.book.findMany({});
-    res.status(200).json({ books: result, ok: true });
-  })
+  errorChecked(
+    async (req: RequestWithAuthorId & RequestWithPublisherId, res) => {
+      var result;
+      if (req.authorId) {
+        result = await prisma.book.findMany({
+          where: { authorId: req.authorId },
+        });
+      } else if (req.publisherId) {
+        result = await prisma.book.findMany({
+          where: { publisherId: req.publisherId },
+        });
+      } else {
+        result = await prisma.book.findMany();
+      }
+      res.status(200).json({ books: result, ok: true });
+    }
+  )
 );
 
 router.post(

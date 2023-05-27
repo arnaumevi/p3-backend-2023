@@ -4,6 +4,8 @@ import cors from "cors";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import booksRouter from "./books.js";
+import authorsRouter from "./authors.js";
+import publishersRouter from "./publishers.js";
 import { defaultErrorHandler } from "./utils.js";
 
 dotenv.config();
@@ -14,6 +16,10 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 app.use("/books", booksRouter);
+app.use("/authors", authorsRouter);
+app.use("/publishers", publishersRouter);
+
+app.use(defaultErrorHandler);
 
 const { SERVER_PORT } = process.env;
 

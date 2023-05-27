@@ -13,10 +13,8 @@ model Book {
   isbn         String    @unique
   publishedAt  DateTime
   authorId     Int
-  categoryId   Int
   publisherId  Int
   author       Author    @relation(fields: [authorId], references: [id])
-  category     Category  @relation(fields: [categoryId], references: [id])
   publisher    Publisher @relation(fields: [publisherId], references: [id])
 }
 
@@ -24,16 +22,14 @@ model Author {
   id    Int    @id @default(autoincrement())
   name  String @unique
   books Book[]
+  
 }
 
-model Category {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
-  books Book[]
-}
+
 
 model Publisher {
   id    Int    @id @default(autoincrement())
   name  String @unique
   books Book[]
+  
 }
